@@ -34,7 +34,7 @@
 	
 	"description": "Protokolliert Postings und Ratings für User im Standard-Forum.",
 	"author": "JodliDev",
-	"homepage_url": "https://github.com/JodliDev/derStandard-userAnalyzer",
+	"homepage_url": "https://github.com/JodliDev/standardUserAnalyzer",
 	"icons": {
 		"128": "icon-128.png",
 		"16": "icon-16.png",
