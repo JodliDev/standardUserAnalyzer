@@ -17,8 +17,8 @@ const Lang = new function() {
 		prompt_choose_name_for_category: "Wähle einen Namen für die Kategorie.",
 		prompt_choose_color_for_category: "Wähle einen css Farbcode (Hexadecimal ist möglich).",
 		prompt_import_data: "Dadurch werden alle bisherigen Daten überschrieben / gelöscht. \nFortfahren?",
-		timeline_closed: "Zeitleiste &#9205;",
-		timeline_opened: "Zeitleiste &#9207;",
+		timeline_closed: "⏵ Zeitleiste",
+		timeline_opened: "⏷ Zeitleiste",
 		minutes_abr: "min;"
 	};
 	this.get = function(key, ... replacers) {

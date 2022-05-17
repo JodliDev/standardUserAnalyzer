@@ -56,12 +56,12 @@ function fireEvent(el, event) {
 	el.dispatchEvent(e);
 }
 
-function jumpToPosing(articleId, postingId) {
+function jumpToPosting(articleId, postingId) {
 	let id = "script"+Date.now();
 	let script = document.createElement("script");
 	script.setAttribute("type", "text/javascript");
 	script.setAttribute("id", id);
-	
+
 	script.innerHTML = "window.ForumLoader.loadForum({forumKeyType: 1,forumKeyId: '"+articleId+"', selectedPostingId: '"+postingId+"'});document.body.removeChild(document.getElementById('"+id+"'));";
 	document.body.appendChild(script);
 }
@@ -196,7 +196,7 @@ function drawTimelineBox(box, article) {
 	
 	const closeTimeLine = function() {
 		timelineBoxIsOpened = false;
-		timelineHeader.innerHTML = Lang.get("timeline_closed");
+		timelineHeader.innerText = Lang.get("timeline_closed");
 		while(timelineBox.children.length) {
 			timelineBox.removeChild(timelineBox.lastChild);
 		}
@@ -204,7 +204,7 @@ function drawTimelineBox(box, article) {
 	const openTimeLine = async function() {
 		closeTimeLine();
 		timelineBoxIsOpened = true;
-		timelineHeader.innerHTML = Lang.get("timeline_opened");
+		timelineHeader.innerText = Lang.get("timeline_opened");
 		
 		let currentTimeline;
 		
@@ -269,7 +269,7 @@ function drawTimelineBox(box, article) {
 	
 	const timelineHeader = document.createElement("strong");
 	timelineHeader.className = "upost-head";
-	timelineHeader.innerHTML = Lang.get("timeline_closed");
+	timelineHeader.innerText = Lang.get("timeline_closed");
 	timelineHeader.style.cssText = "min-height: unset; padding: 5px; font-size: 1em; cursor: pointer;";
 	timelineHeader.onclick = function() {
 		if(timelineBoxIsOpened)
@@ -371,7 +371,7 @@ async function drawTimeLine(article, category, CLUSTER_SIZE) {
 		postingA.className = tagName;
 		postingA.onclick = function(e) {
 			e.preventDefault();
-			jumpToPosing(article.articleId, posting.postingId);
+			jumpToPosting(article.articleId, posting.postingId);
 		};
 		postingA.onmouseenter = function() {
 			const els = document.getElementsByClassName(tagName);
@@ -586,7 +586,7 @@ async function drawCategoryChooser(isCategoryFu, addToCategoryFu) {
 
 		let color = document.createElement("span");
 		color.style.cssText = "width: 20px; height: 20px; line-height: 20px; font-size: 15px; margin: 5px 10px 5px 5px; text-align: center; background-color: "+category.color;
-		color.innerHTML = isCategory ? "&#10004;" : "";
+		color.innerText = isCategory ? "✔" : "";
 		line.appendChild(color);
 
 		let categoryName = document.createElement("a");
@@ -640,7 +640,7 @@ function placeAutomateBtn() {
 	btn.setAttribute("id", "addon-automatBtn");
 	btn.style.cssText = "width: 20px; height: 20px; font-size: 20px; padding: 5px; cursor: pointer;";
 	btn.title = Lang.get("automatically_scan_article");
-	btn.innerHTML = "&#9851;";
+	btn.innerText = "♻";
 	btn.onclick = async function() {
 		await automate();
 	};
