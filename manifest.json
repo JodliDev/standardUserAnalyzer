@@ -1,0 +1,49 @@
+{
+	"browser_action": {
+		"default_icon": "icon-128.png",
+		"default_title": "derStandard User Analyzer"
+	},
+	"background": {
+		"scripts": [
+			"polyfill.js",
+			"Lang.js",
+			"StoreDbBackend.js",
+			"libs/indexedDbImportExport.js"
+		]
+	},
+	"content_scripts": [ {
+		"js": [
+			"polyfill.js",
+			"Lang.js",
+			"dataClasses.js",
+			"Formatter.js",
+			"StoreDbFrontend.js",
+			"RatingsHelper.js",
+			"Loader.js",
+			"StoreHelper.js",
+			"standardUserAnalyzer.js"
+		],
+		"matches": [ "*://*.derstandard.at/story/*", "*://*.derstandard.de/story/*" ],
+		"run_at": "document_idle"
+	} ],
+	"options_ui": {
+		"page": "options/options.html",
+		"browser_style": true
+	},
+	
+	
+	"description": "Protokolliert Postings und Ratings für User im Standard-Forum.",
+	"author": "JodliDev",
+	"homepage_url": "https://github.com/JodliDev/derStandard-userAnalyzer",
+	"icons": {
+		"128": "icon-128.png",
+		"16": "icon-16.png",
+		"48": "icon-48.png"
+	},
+	"permissions": [
+		"storage"
+	],
+	"manifest_version": 2,
+	"name": "derStandard User Analyzer",
+	"version": "1.0.0"
+}
