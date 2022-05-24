@@ -7,7 +7,8 @@
 		"scripts": [
 			"polyfill.js",
 			"Lang.js",
-			"StoreDbBackend.js",
+			"db/StoreDbDefinitions.js",
+			"db/StoreDbBackend.js",
 			"libs/indexedDbImportExport.js"
 		]
 	},
@@ -16,12 +17,23 @@
 			"polyfill.js",
 			"Lang.js",
 			"dataClasses.js",
+			"PostingCache.js",
 			"Formatter.js",
-			"StoreDbFrontend.js",
+			"db/StoreDbDefinitions.js",
+			"db/StoreDbFrontend.js",
 			"RatingsHelper.js",
 			"Loader.js",
-			"StoreHelper.js",
+			"db/StoreHelper.js",
+			"uiClasses/BaseNavigationElement.js",
+			"uiClasses/Timeline.js",
+			"uiClasses/ArticleCategory.js",
+			"uiClasses/AutomateBtn.js",
+			"uiClasses/ArticleInfoBox.js",
+			"uiClasses/UserPostingState.js",
 			"standardUserAnalyzer.js"
+		],
+		"css":[
+			"style.css"
 		],
 		"matches": [ "*://*.derstandard.at/story/*", "*://*.derstandard.de/story/*" ],
 		"run_at": "document_idle"
@@ -41,7 +53,9 @@
 		"48": "icon-48.png"
 	},
 	"permissions": [
-		"storage"
+		"storage",
+		"webRequest",
+		"https://apps.derstandard.at/"
 	],
 	"manifest_version": 2,
 	"name": "derStandard User Analyzer",

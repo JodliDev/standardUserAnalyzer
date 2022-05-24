@@ -3,23 +3,30 @@
 const Lang = new function() {
 	let store = {
 		article_category: "Artikel Kategorie",
-		automatically_scan_article: "Scanne diesen Artikel automatisch",
+		automate_description: "Besucht automatisch sämtliche Seiten dieses Artikels und scannt sämtliche Postings sowie Ratings. Achtung: Abhängig von der Anzahl der Postings, dauert das eine Weile.",
+		posting_scanned_state: "Gescannte Postings: %d / %d",
 		posting_categories: "Posting Kategorien",
-		new_category_btn: "+ Neue Kategorie:",
+		new_category_btn: "Neue Kategorie",
+		cancel: "Abbrechen",
 		colon_cluster_size: "Cluster-Größe:",
+		colon_filter_user: "Filtere User:",
 		colon_responses: "Antworten:",
 		colon_threads: "Threads:",
 		colon_voted: "Gevoted:",
 		colon_was_voted: "Wurde gevoted:",
 		go_to_first_page: "Gehe zur ersten Seite",
-		go_to_page_x: "Gehe zu Seite %d",
-		info_load_rating: "Seite %d \nLade Rating %d/%d",
+		go_to_page_x_of_x: "Gehe zu Seite %d/%d",
+		info_load_rating: "Seite %d/%d \nLade Rating %d/%d",
+		only_showing_x_postings: "Nicht vollständig gescannt! Es werden nur %d von %d Postings gezeigt.",
+		posting_does_not_exist: "Posting existiert nicht.",
 		prompt_choose_name_for_category: "Wähle einen Namen für die Kategorie.",
 		prompt_choose_color_for_category: "Wähle einen css Farbcode (Hexadecimal ist möglich).",
 		prompt_import_data: "Dadurch werden alle bisherigen Daten überschrieben / gelöscht. \nFortfahren?",
-		timeline_closed: "⏵ Zeitleiste",
-		timeline_opened: "⏷ Zeitleiste",
-		minutes_abr: "min;"
+		scan_article: "Scanne Artikel",
+		skip_ratings: "Überspringe Ratings",
+		start_scanning: "Starte Scan-Vorgang",
+		timeline_btn: "Zeitleiste",
+		minutes_abr: "min"
 	};
 	this.get = function(key, ... replacers) {
 		if(!store.hasOwnProperty(key))

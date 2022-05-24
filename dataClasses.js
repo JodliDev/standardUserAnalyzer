@@ -8,13 +8,14 @@ function Article(articleId, timestamp, categoryId) {
 	this.timestamp = timestamp;
 	this.categories = [parseInt(categoryId)];
 }
-function Posting(articleId, threadId, postingId, userId, timeString) {
+function Posting(articleId, parentId, responseLevel, postingId, userId, timeString) {
 	this.articleId = parseInt(articleId);
-	this.threadId = threadId ? parseInt(threadId) : "";
+	this.parentId = parentId ? parseInt(parentId) : "";
+	this.responseLevel = parseInt(responseLevel);
 	this.postingId = parseInt(postingId);
 	this.userId = parseInt(userId);
 	this.timestamp = Formatter.localeDateStringToTimeStamp(timeString);
-	this.isThread = threadId === "";
+	this.isThread = parentId === "";
 	this.categories = [];
 }
 function Rating(postingId, givenUserId, receivedUserId) {

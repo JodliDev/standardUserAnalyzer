@@ -1,23 +1,16 @@
 'use strict';
 
 const StoreDbFrontend = new function() {
-	const MAIN_CATEGORY_NAME = "Alle",
-		MAIN_CATEGORY_COLOR = "gray",
-		
-		TABLE_USER = "users",
-		TABLE_ARTICLES = "articles",
-		TABLE_POSTINGS = "postings",
-		TABLE_POSITIVE_RATINGS = "positiveRatings",
-		TABLE_NEGATIVE_RATINGS = "negativeRatings",
-		TABLE_CATEGORIES = "categories",
-		TABLE_CATEGORY_COUNTER = "categoryCounter",
-		
-		INDEX_POSTINGS_BY_ARTICLE = "postingId:articleId",
-		INDEX_POSITIVE_RATINGS_BY_POSTING = "positiveRatings:postingId",
-		INDEX_NEGATIVE_RATINGS_BY_POSTING = "negativeRatings:postingId",
-		INDEX_CATEGORY_COUNTER_BY_CATEGORY_AND_USER = "categoryCounter:categoryId,userId";
 	
-	const getAll = function(tableName, indexName, indexValue) {
+	const getCount = function(tableName, indexName, indexValue) {
+			return sendMessage({
+				type: "getCount",
+				tableName: tableName,
+				indexName: indexName,
+				value: indexValue
+			});
+		},
+		getAll = function(tableName, indexName, indexValue) {
 			return sendMessage({
 				type: "getAll",
 				tableName: tableName,
@@ -95,13 +88,25 @@ const StoreDbFrontend = new function() {
 		return saveObj(TABLE_ARTICLES, article, true);
 	};
 	
+	this.countPostingsForArticle = function(articleId) {
+		return getCount(TABLE_POSTINGS, INDEX_POSTINGS_BY_ARTICLE, parseInt(articleId));
+	};
 	this.getPostingsForArticle = function(articleId) {
 		return getAll(TABLE_POSTINGS, INDEX_POSTINGS_BY_ARTICLE, parseInt(articleId));
 	};
-	this.savePosting = async function(articleId, threadId, postingId, userId, timeString) {
+	
+	this.getPostingsForThread = function(parentId) {
+		return getAll(TABLE_POSTINGS, INDEX_POSTINGS_BY_PARENT, parseInt(parentId));
+	};
+	this.hasResponses = async function(postingId) {
+		return getObjByKey(TABLE_POSTINGS, INDEX_POSTINGS_BY_PARENT, parseInt(postingId)).then(function(r) {
+			return r !== undefined;
+		})
+	};
+	this.savePosting = async function(articleId, parentId, responseLevel, postingId, userId, timeString) {
 		const posting = await getObjByKey(TABLE_POSTINGS, false, parseInt(postingId));
 		return !posting
-			? saveObj(TABLE_POSTINGS, new Posting(articleId, threadId, postingId, userId, timeString))
+			? saveObj(TABLE_POSTINGS, new Posting(articleId, parentId, responseLevel, postingId, userId, timeString))
 			: Promise.resolve(posting);
 	};
 	this.updatePosting = function(posting) {
@@ -117,6 +122,14 @@ const StoreDbFrontend = new function() {
 	};
 	this.getNegativeRatingsForPosting = function(postingId) {
 		return getAll(TABLE_NEGATIVE_RATINGS, INDEX_NEGATIVE_RATINGS_BY_POSTING, parseInt(postingId));
+	};
+	this.countRatingsForPosting = function(postingId) {
+		return Promise.all([
+			getCount(TABLE_POSITIVE_RATINGS, INDEX_POSITIVE_RATINGS_BY_POSTING, parseInt(postingId)),
+			getCount(TABLE_NEGATIVE_RATINGS, INDEX_NEGATIVE_RATINGS_BY_POSTING, parseInt(postingId))
+		]).then(function([positive, negative]) {
+			return {positive: positive, negative: negative, postingId: postingId};
+		});
 	};
 	
 	this.savePositiveRating = function(postingId, givenUserId, receivedUserId) {

@@ -1,0 +1,288 @@
+#story-community {
+	position: relative;
+}
+
+@keyframes spin {
+	0% { transform:rotate(0deg); }
+	100% { transform:rotate(360deg); }
+}
+
+.addon-loader {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+
+	border:5px solid var(----theme-primarydeco);
+	border-radius:50%;
+	animation:spin 2s linear infinite;
+	border-top-color: rgba(0,0,0,0);
+}
+
+.addon-dropdown {
+	z-index: 10000;
+	position: absolute;
+	padding: 3px 10px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 0.375rem;
+	background-color: var(--theme-background);
+	box-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.2);
+}
+
+.addon-menu {
+	margin: 10px;
+	padding: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	background-color: rgba(0, 0, 0, 0.07);
+	border-radius: 10px;
+}
+
+.addon-highlight {
+	color: var(--theme-primarydeco);
+	font-weight: bold;
+	margin: 0 5px;
+	text-align: center;
+	font-size: 1.2em;
+}
+
+.addon-root {
+	background: var(--theme-background);
+	margin: 10px 0;
+}
+
+.addon-header {
+	font-weight: bold;
+	font-size: 1.2em;
+	text-align: center;
+	margin: 10px 0 5px 0;
+}
+
+
+
+.addOn-btnBox {
+	display: flex;
+	cursor: pointer;
+	align-items: center;
+	margin-left: 10px;
+}
+.addOn-btnBox .addon-categoryRectangle {
+	width: 15px;
+	height: 15px;
+	border: 1px solid gray;
+	margin: 1px;
+}
+
+.addon-navigationBar {
+	background-color: rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: space-around;
+}
+.addon-navigationBar div {
+	font-weight: bold;
+	padding: 5px;
+}
+
+.addon-content {
+	padding-top: 5px;
+	background-color: rgba(0, 0, 0, 0.07);
+}
+
+
+.addon-center {
+	text-align: center;
+}
+.addon-center .addon-centerContent {
+	display: inline-block;
+}
+
+.addon-expandable {
+	cursor: pointer;
+	position: relative;
+}
+
+.addon-expandable.opened {
+	background-color: var(--theme-primarydeco);
+	color: white;
+}
+.addon-expandable.opened::before {
+	border-color: var(--theme-primarydeco) transparent transparent transparent;
+	border-style: solid;
+	border-width: 7px 7px 0;
+	bottom: -6px;
+	content: "";
+	height: 0;
+	width: 0;
+	left: 14px;
+	margin: 0 auto;
+	position: absolute;
+}
+
+.addon-userStatisticsWindow {
+	width: 100%;
+	overflow-x: auto;
+}
+
+.addon-userStatistics th {
+	min-width: 70px;
+	text-align: right;
+}
+
+.addon-userStatistics th.columnTitle {
+	text-align: center;
+	min-width: 50px;
+}
+
+.addon-userStatistics td {
+	text-align: center;
+}
+
+.addon-userStatistics .ratingNegative {
+	color: red;
+}
+.addon-userStatistics .ratingNegative::before {
+	content: "-";
+}
+
+.addon-userStatistics .ratingPositive {
+	color: green;
+}
+.addon-userStatistics .ratingPositive::before {
+	content: "+";
+}
+
+
+.addon-categoryChooser .addon-line {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	cursor: pointer;
+}
+
+.addon-categoryChooser .addon-colorPreview {
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 15px;
+	margin: 5px 10px 5px 5px;
+	text-align: center;
+}
+
+.addon-categoryChooser .addon-create {
+	display: flex;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.addon-categoryChooser .addon-create::before {
+	content: "+";
+	margin-right: 5px;
+}
+
+
+
+.addon-timelineNavi {
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+	font-size: 0.8em;
+}
+
+
+.addon-categoryBtn {
+	cursor: pointer;
+	padding: 0 3px;
+	margin: 5px;
+}
+
+.addon-filterBox input {
+	width: 100px;
+}
+.addon-clusterSizeBox, .addon-filterBox {
+	flex-grow: 1;
+	text-align: right;
+}
+.addon-clusterSizeBox input {
+	width: 30px;
+	text-align: right;
+}
+.addon-timelineNavi .label {
+	font-weight: bold;
+}
+.addon-timelineNavi input {
+	margin: 5px;
+	background-color: unset;
+	border: 1px solid gray;
+}
+
+.addon-timeline {
+	max-height: 300px;
+	min-height: 10px;
+	overflow: auto;
+	padding-left: 5px;
+	font-size: 0.7em;
+}
+
+.addon-timeline .addon-line {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	flex-wrap: wrap;
+	white-space: nowrap;
+	justify-content: left;
+}
+
+.addon-timeline .addon-line .dateTime {
+	font-weight: bold;
+	color: var(--theme-primarydeco);
+}
+.addon-timeline a {
+	margin-left: 5px;
+	color: black;
+	padding: 0 3px;
+}
+
+.addon-timeline a.mouseenter, .addon-timeline a.dropdown-opened {
+	background-color: var(--theme-primarydeco);
+	color: white;
+}
+.addon-timeline a.isThread {
+	font-weight: bold;
+}
+
+
+
+.addon-emptyPostingBody {
+	padding: 0 10px;
+	cursor: pointer;
+}
+
+.addon-gotoBtn {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	padding: 0 5px;
+	cursor: pointer;
+}
+.addon-gotoBtn::after {
+	font-size: 1.5em;
+	content: "↘";
+}
+.addon-gotoBtn:hover {
+	background-color: var(--theme-primarydeco);
+	color: white;
+}
+
+
+.addon-automation {
+	text-align: center;
+}
+.addon-automation .addon-startAutomation {
+	margin: 10px 0;
+	padding: 5px;
+	text-align: center;
+	font-weight: bold;
+	cursor: pointer;
+}
+.addon-automation #addon-skipRatingsCheckbox {
+	margin-top: 20px;
+}

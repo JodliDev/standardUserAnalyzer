@@ -8,8 +8,8 @@ const StoreHelper = {
 		return posting.categories.includes(category.id);
 	},
 	
-	storePosting: async function(article, threadId, postingId, userId, timeString) {
-		const posting = await StoreDbFrontend.savePosting(article.articleId, threadId, postingId, userId, timeString);
+	storePosting: async function(article, parentId, responseLevel, postingId, userId, timeString) {
+		const posting = await StoreDbFrontend.savePosting(article.articleId, parentId, responseLevel, postingId, userId, timeString);
 		
 		for(const categoryId of article.categories) {
 			await this.addPostingToCategory(posting, categoryId);

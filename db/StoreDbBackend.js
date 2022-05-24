@@ -1,23 +1,19 @@
 'use strict';
 
 const StoreDbBackend = new function() {
-	const TABLE_USER = "users",
-		TABLE_ARTICLES = "articles",
-		TABLE_POSTINGS = "postings",
-		TABLE_POSITIVE_RATINGS = "positiveRatings",
-		TABLE_NEGATIVE_RATINGS = "negativeRatings",
-		TABLE_CATEGORIES = "categories",
-		TABLE_CATEGORY_COUNTER = "categoryCounter",
-		
-		INDEX_POSTINGS_BY_ARTICLE = "postingId:articleId",
-		INDEX_POSITIVE_RATINGS_BY_POSTING = "positiveRatings:postingId",
-		INDEX_NEGATIVE_RATINGS_BY_POSTING = "negativeRatings:postingId",
-		INDEX_CATEGORY_COUNTER_BY_CATEGORY_AND_USER = "categoryCounter:categoryId,userId";
-	
 	let db = null;
 	
 	const handleRequestError = function(e) {
 		console.error(e);
+	};
+	const handleRequest = function(request, resolve, reject) {
+		request.onerror = function(e) {
+			handleRequestError(e);
+			reject();
+		};
+		request.onsuccess = function() {
+			resolve(request.result);
+		};
 	};
 	
 	let init = function() {
@@ -40,6 +36,7 @@ const StoreDbBackend = new function() {
 
 				const postingsStore = db.createObjectStore(TABLE_POSTINGS, {keyPath: "postingId"});
 				postingsStore.createIndex(INDEX_POSTINGS_BY_ARTICLE, "articleId",  {unique: false});
+				postingsStore.createIndex(INDEX_POSTINGS_BY_PARENT, "parentId",  {unique: false});
 
 				const positiveRatingsStore = db.createObjectStore(TABLE_POSITIVE_RATINGS, {keyPath: "id", autoIncrement: true});
 				positiveRatingsStore.createIndex(INDEX_POSITIVE_RATINGS_BY_POSTING, "postingId",  {unique: false});
@@ -63,7 +60,28 @@ const StoreDbBackend = new function() {
 		});
 	}
 	
-	
+	this.getCount = async function(tableName, indexName, indexValue) {
+		await init();
+		return new Promise(function(resolve, reject) {
+			const transaction = db.transaction(tableName);
+			const store = transaction.objectStore(tableName);
+			
+			const request = indexName
+				? store.index(indexName).count(indexValue)
+				: store.count();
+			
+			// handleRequest(request, resolve, reject);
+			request.onerror = function(e) {
+				handleRequestError(e);
+				reject();
+			};
+			request.onsuccess = function() {
+				console.log(indexName, indexValue, request.result)
+				resolve(request.result);
+			};
+			
+		});
+	};
 	this.getAll = async function(tableName, indexName, indexValue) {
 		await init();
 		return new Promise(function(resolve, reject) {
@@ -74,13 +92,7 @@ const StoreDbBackend = new function() {
 				? store.index(indexName).getAll(indexValue)
 				: store.getAll();
 			
-			request.onerror = function(e) {
-				handleRequestError(e);
-				reject();
-			};
-			request.onsuccess = function() {
-				resolve(request.result);
-			};
+			handleRequest(request, resolve, reject);
 		});
 	};
 	this.getObjByKey = async function(tableName, indexName, key) {
@@ -95,13 +107,7 @@ const StoreDbBackend = new function() {
 				? store.index(indexName).get(key)
 				: store.get(key);
 			
-			request.onerror = function(e) {
-				handleRequestError(e);
-				reject();
-			};
-			request.onsuccess = function(event) {
-				resolve(request.result);
-			};
+			handleRequest(request, resolve, reject);
 		});
 	};
 	this.saveObj = async function(tableName, obj, overwrite) {
@@ -126,13 +132,7 @@ const StoreDbBackend = new function() {
 			let objStore = db.transaction([tableName], "readwrite").objectStore(tableName);
 			const request = objStore.delete(key);
 			
-			request.onerror = function(e) {
-				handleRequestError(e);
-				reject();
-			};
-			request.onsuccess = function(event) {
-				resolve(request.result);
-			};
+			handleRequest(request, resolve, reject);
 		});
 	};
 	this.clearTable = async function(tableName) {
@@ -141,30 +141,7 @@ const StoreDbBackend = new function() {
 			let objStore = db.transaction([tableName], "readwrite").objectStore(tableName);
 			const request = objStore.clear();
 			
-			request.onerror = function(e) {
-				handleRequestError(e);
-				reject();
-			};
-			request.onsuccess = function(event) {
-				resolve(request.result);
-			};
-		});
-	};
-	this.getIndexCount = async function(tableName, indexName, key) {
-		await init();
-		return new Promise(function(resolve, reject) {
-			const transaction = db.transaction(tableName);
-			const store = transaction.objectStore(tableName);
-			const index = store.index(indexName);
-			const request = index.count(key)
-			
-			request.onerror = function(e) {
-				handleRequestError(e);
-				reject();
-			};
-			request.onsuccess = function(event) {
-				resolve(request.result);
-			};
+			handleRequest(request, resolve, reject);
 		});
 	};
 	
@@ -178,6 +155,9 @@ const StoreDbBackend = new function() {
 getRuntime().onMessage.addListener(function({type, tableName, indexName, key, value, overwrite}, sender, sendResponse ) {
 	let promise;
 	switch(type) {
+		case "getCount":
+			promise = StoreDbBackend.getCount(tableName, indexName, value);
+			break;
 		case "getAll":
 			promise = StoreDbBackend.getAll(tableName, indexName, value);
 			break;
