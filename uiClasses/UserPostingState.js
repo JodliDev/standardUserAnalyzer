@@ -16,7 +16,9 @@ class UserPostingState {
 		//
 		//add menu:
 		//
-		const header = this.postingDiv.getElementsByClassName("upost-head")[0];
+		// console.log(this.postingDiv);
+		// console.log(this.postingDiv.getElementsByClassName("upost-postingcontainer")[);
+		const header = this.postingDiv.getElementsByClassName("upost-postingcontainer")[0];
 		
 		const oldBtnBox = header.getElementsByClassName("addOn-btnBox");
 		if(oldBtnBox.length)
@@ -62,7 +64,14 @@ class UserPostingState {
 		let button = form.getElementsByClassName("ratings-log-showmore")[0];
 		while(button) {
 			fireEvent(form, new SubmitEvent("submit", {submitter: button, bubbles: true, cancelable: true}));
-			await waitForElementChange(box);
+			try {
+				await waitForElementChange(box);
+			}
+			catch(e) {
+				console.error("Timeout while awaiting changed ratings for posting "+posting.postingId);
+				LoadRatingsHelper.fail(posting.postingId);
+				break;
+			}
 			button = box.getElementsByClassName("ratings-log-showmore")[0];
 		}
 		
@@ -81,11 +90,11 @@ class UserPostingState {
 				negativeIndex[userId] = true;
 			}
 		}
-		
+
 		await StoreHelper.doRatingsForPosting(posting, positiveIndex, negativeIndex);
 		box.isProcessing = false;
 		
-		RatingsHelper.continueRatings(posting.postingId);
+		LoadRatingsHelper.continue(posting.postingId);
 	}
 	
 	async openPostingCategoryMenu() {
@@ -119,7 +128,6 @@ class UserPostingState {
 		
 		
 		const categoryEl = await drawCategoryChooser(async function(category) {
-			console.log(self.extendedPostingData, posting, category);
 				return StoreHelper.postingIsCategory(posting, category);
 			},
 			async function(category, added) {

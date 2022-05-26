@@ -123,20 +123,31 @@ const StoreDbFrontend = new function() {
 	this.getNegativeRatingsForPosting = function(postingId) {
 		return getAll(TABLE_NEGATIVE_RATINGS, INDEX_NEGATIVE_RATINGS_BY_POSTING, parseInt(postingId));
 	};
-	this.countRatingsForPosting = function(postingId) {
+	
+	this.countRatings = function(indexPositive, dataPositive, indexNegative, dataNegative) {
 		return Promise.all([
-			getCount(TABLE_POSITIVE_RATINGS, INDEX_POSITIVE_RATINGS_BY_POSTING, parseInt(postingId)),
-			getCount(TABLE_NEGATIVE_RATINGS, INDEX_NEGATIVE_RATINGS_BY_POSTING, parseInt(postingId))
+			getCount(TABLE_POSITIVE_RATINGS, indexPositive, dataPositive),
+			getCount(TABLE_NEGATIVE_RATINGS, indexNegative, dataNegative)
 		]).then(function([positive, negative]) {
-			return {positive: positive, negative: negative, postingId: postingId};
+			return {positive: positive, negative: negative};
 		});
 	};
 	
-	this.savePositiveRating = function(postingId, givenUserId, receivedUserId) {
-		return saveObj(TABLE_POSITIVE_RATINGS, new Rating(postingId, givenUserId, receivedUserId));
+	this.countRatingsForPosting = function(postingId) {
+		return this.countRatings(INDEX_POSITIVE_RATINGS_BY_POSTING, parseInt(postingId));
 	};
-	this.saveNegativeRating = function(postingId, categoryId, givenUserId, receivedUserId) {
-		return saveObj(TABLE_NEGATIVE_RATINGS, new Rating(postingId, categoryId, givenUserId, receivedUserId));
+	this.countGivenRatings = function(categoryId, givenUserId) {
+		return this.countRatings(INDEX_POSITIVE_RATINGS_BY_CATEGORY_AND_GIVENUSER, [parseInt(categoryId), parseInt(givenUserId)]);
+	};
+	this.countReceivedRatings = function(categoryId, receivedUserId) {
+		return this.countRatings(INDEX_POSITIVE_RATINGS_BY_CATEGORY_AND_RECEIVEDUSER, [parseInt(categoryId), parseInt(receivedUserId)]);
+	};
+	
+	this.savePositiveRating = function(posting, givenUserId, receivedUserId) {
+		return saveObj(TABLE_POSITIVE_RATINGS, new Rating(posting.articleId, posting.postingId, givenUserId, receivedUserId));
+	};
+	this.saveNegativeRating = function(posting, givenUserId, receivedUserId) {
+		return saveObj(TABLE_NEGATIVE_RATINGS, new Rating(posting, givenUserId, receivedUserId));
 	};
 	
 	this.deletePositiveRating = function(id) {

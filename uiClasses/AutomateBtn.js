@@ -25,13 +25,16 @@ class AutomateBtn extends BaseNavigationElement {
 		
 		this.isRunning = true;
 		document.getElementById("postings-container").style.display = "none";
+		document.getElementById("addon-root").scrollIntoView();
 		
 		//go to first page if needed:
 		let startBtn = document.getElementsByClassName("forum-tb-btnstart ")[0];
 		if(!startBtn.disabled) {
 			this.setState(Lang.get("go_to_first_page"));
 			fireEvent(startBtn);
-			await waitForElementChange(document.getElementById("postings-container"));
+			// await waitForElementChange(document.getElementById("postings-container"));
+			await LoadPageHelper.wait();
+			document.getElementById("addon-root").scrollIntoView();
 		}
 		
 		
@@ -44,7 +47,9 @@ class AutomateBtn extends BaseNavigationElement {
 			if(!nextBtn.disabled && this.isRunning) {
 				this.setState(Lang.get("go_to_page_x_of_x", this.getCurrentPage() + 1, this.getMaxPages()));
 				fireEvent(nextBtn);
-				await waitForElementChange(document.getElementById("postings-container"));
+				// await waitForElementChange(document.getElementById("postings-container"));
+				await LoadPageHelper.wait();
+				document.getElementById("addon-root").scrollIntoView();
 				nextBtn = document.getElementsByClassName("forum-tb-btnnext")[0];
 			}
 			
@@ -58,9 +63,9 @@ class AutomateBtn extends BaseNavigationElement {
 		let count = 0;
 		const max = elements.length;
 		for(const el of elements) {
+			++count;
 			if(el.classList.contains("ratings-counts-empty"))
 				continue;
-			++count;
 			this.setState(Lang.get("info_load_rating", this.getCurrentPage(), this.getMaxPages(), count, max));
 			
 			let postingId = el.getAttribute("data-closable-target").match(/-(\d+)$/)[1];
@@ -71,7 +76,13 @@ class AutomateBtn extends BaseNavigationElement {
 			
 			if(dbRatings.positive !== positiveRating || dbRatings.negative !== negativeRating) {
 				fireEvent(el);
-				await RatingsHelper.waitForRatings(postingId);
+				console.log("await", postingId, el);
+				try {
+					await LoadRatingsHelper.wait(postingId);
+				}
+				catch(e) {
+					console.error("Ratings for posting "+postingId+" did not finish properly!", el);
+				}
 				fireEvent(el);
 			}
 			

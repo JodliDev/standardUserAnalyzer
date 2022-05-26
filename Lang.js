@@ -4,6 +4,7 @@ const Lang = new function() {
 	let store = {
 		article_category: "Artikel Kategorie",
 		automate_description: "Besucht automatisch sämtliche Seiten dieses Artikels und scannt sämtliche Postings sowie Ratings. Achtung: Abhängig von der Anzahl der Postings, dauert das eine Weile.",
+		frequencies: "Häufigkeiten",
 		posting_scanned_state: "Gescannte Postings: %d / %d",
 		posting_categories: "Posting Kategorien",
 		new_category_btn: "Neue Kategorie",
@@ -11,6 +12,7 @@ const Lang = new function() {
 		colon_cluster_size: "Cluster-Größe:",
 		colon_filter_user: "Filtere User:",
 		colon_responses: "Antworten:",
+		colon_sort_by: "Sortiere nach:",
 		colon_threads: "Threads:",
 		colon_voted: "Gevoted:",
 		colon_was_voted: "Wurde gevoted:",
@@ -22,10 +24,12 @@ const Lang = new function() {
 		prompt_choose_name_for_category: "Wähle einen Namen für die Kategorie.",
 		prompt_choose_color_for_category: "Wähle einen css Farbcode (Hexadecimal ist möglich).",
 		prompt_import_data: "Dadurch werden alle bisherigen Daten überschrieben / gelöscht. \nFortfahren?",
+		responses: "Antworten",
 		scan_article: "Scanne Artikel",
 		skip_ratings: "Überspringe Ratings",
 		start_scanning: "Starte Scan-Vorgang",
 		timeline_btn: "Zeitleiste",
+		threads: "Threads",
 		minutes_abr: "min"
 	};
 	this.get = function(key, ... replacers) {

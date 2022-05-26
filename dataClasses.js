@@ -18,9 +18,10 @@ function Posting(articleId, parentId, responseLevel, postingId, userId, timeStri
 	this.isThread = parentId === "";
 	this.categories = [];
 }
-function Rating(postingId, givenUserId, receivedUserId) {
+function Rating(posting, givenUserId, receivedUserId) {
 	//id
-	this.postingId = parseInt(postingId);
+	this.articleId = parseInt(posting.articleId);
+	this.postingId = parseInt(posting.postingId);
 	this.givenUserId = parseInt(givenUserId);
 	this.receivedUserId = parseInt(receivedUserId);
 }

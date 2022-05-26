@@ -34,6 +34,30 @@ class BaseNavigationElement {
 		BaseNavigationElement.close(this.root);
 	}
 	
+	async fillCategoryNavi(onClickFu) {
+		const self = this;
+		const navi = createElement("div", this.root, "addon-timelineNavi");
+		
+		const categories = await StoreDbFrontend.getAllCategories();
+		let currentCategoryBtn = null;
+		for(const category of categories) {
+			const btn = createElement("div", navi, "addon-categoryBtn");
+			btn.innerText = category.name;
+			btn.style.cssText = "background-color: "+category.color;
+			btn.onclick = function() {
+				if(currentCategoryBtn)
+					currentCategoryBtn.classList.remove("selected");
+				btn.classList.add("selected");
+				currentCategoryBtn = btn;
+				onClickFu.call(self, category);
+			}
+		}
+		
+		navi.getElementsByClassName("addon-categoryBtn")[0].onclick();
+		return navi;
+	}
+	
+	
 	static close(el) {
 		if(BaseNavigationElement.currentBtn) {
 			BaseNavigationElement.currentBtn.classList.remove("opened");

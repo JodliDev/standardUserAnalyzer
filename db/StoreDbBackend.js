@@ -5,6 +5,7 @@ const StoreDbBackend = new function() {
 	
 	const handleRequestError = function(e) {
 		console.error(e);
+		console.trace();
 	};
 	const handleRequest = function(request, resolve, reject) {
 		request.onerror = function(e) {
@@ -110,6 +111,19 @@ const StoreDbBackend = new function() {
 			handleRequest(request, resolve, reject);
 		});
 	};
+	this.getKeys = async function(tableName, indexName, key) {
+		await init();
+		return new Promise(function(resolve, reject) {
+			
+			const transaction = db.transaction([tableName], "readonly");
+			const store = transaction.objectStore(tableName);
+			const request = indexName
+				? store.index(indexName).getAllKeys(key)
+				: store.getAllKeys(key);
+			
+			handleRequest(request, resolve, reject);
+		});
+	};
 	this.saveObj = async function(tableName, obj, overwrite) {
 		await init();
 		return new Promise(function(resolve, reject) {
@@ -163,6 +177,9 @@ getRuntime().onMessage.addListener(function({type, tableName, indexName, key, va
 			break;
 		case "getObjByKey":
 			promise = StoreDbBackend.getObjByKey(tableName, indexName, key);
+			break;
+		case "getKeys":
+			promise = StoreDbBackend.getKeys(tableName, indexName);
 			break;
 		case "saveObj":
 			promise = StoreDbBackend.saveObj(tableName, value, overwrite);

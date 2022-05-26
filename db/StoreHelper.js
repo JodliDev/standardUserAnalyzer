@@ -58,12 +58,12 @@ const StoreHelper = {
 		for(const userId in positiveRatingsMap) {
 			if(!positiveRatingsMap.hasOwnProperty(userId))
 				continue;
-			await StoreDbFrontend.savePositiveRating(posting.postingId, userId, receivedUserId);
+			await StoreDbFrontend.savePositiveRating(posting, userId, receivedUserId);
 		}
 		for(const userId in negativeRatingsMap) {
 			if(!negativeRatingsMap.hasOwnProperty(userId))
 				continue;
-			await StoreDbFrontend.saveNegativeRating(posting.postingId, userId, receivedUserId);
+			await StoreDbFrontend.saveNegativeRating(posting, userId, receivedUserId);
 		}
 		
 		

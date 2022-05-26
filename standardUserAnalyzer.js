@@ -45,16 +45,19 @@ function close_on_clickOutside(el, additionalCloseFu) {
 	return closeFu;
 }
 function createFloatingDropdown(referenceEl) {
+	const visibleSpace = 5;
 	let parent = document.getElementById("story-community");
 	let dropdownWidth = parent.offsetWidth/1.5;
 	let rectParent = parent.getBoundingClientRect();
 	let rectReference = referenceEl.getBoundingClientRect();
-	
-	let x = Math.min(parent.offsetWidth - dropdownWidth, Math.max(0, referenceEl.offsetLeft + referenceEl.offsetWidth/2 - dropdownWidth/2));
+	//20: padding*2
+	let x = Math.min(parent.offsetWidth - dropdownWidth - 20 - visibleSpace, Math.max(5, referenceEl.offsetLeft + referenceEl.offsetWidth/2 - dropdownWidth/2));
 	let y = (rectReference.top - rectParent.top) + referenceEl.offsetHeight;
+	//6: padding*2
+	const maxHeight = window.innerHeight / 2;
 	
 	let dropdownEl = createElement("div", null, "addon-dropdown");
-	dropdownEl.style.cssText = "left:" + x + "px; top:" + y + "px; width: "+dropdownWidth+"px;";
+	dropdownEl.style.cssText = "left:" + x + "px; top:" + y + "px; width: "+dropdownWidth+"px; max-height: "+maxHeight+"px";
 	
 	parent.appendChild(dropdownEl);
 	referenceEl.classList.add("dropdown-opened");
@@ -64,20 +67,14 @@ function createFloatingDropdown(referenceEl) {
 	return dropdownEl;
 }
 function waitForElementChange(el) {
-	return new Promise(function(resolve, reject) {
-		const id = window.setTimeout(function() {
-			reject("No change in 10 seconds");
-			console.log(el)
-			console.trace();
-			observer.disconnect();
-		}, 10000);
-		const observer = new MutationObserver(function() {
-			window.clearTimeout(id);
-			observer.disconnect();
-			resolve();
-		});
-		observer.observe(el, {childList: true});
+	const waiter = new WaitingClass()
+	
+	const observer = new MutationObserver(function() {
+		observer.disconnect();
+		waiter.continue();
 	});
+	observer.observe(el, {childList: true});
+	return waiter.wait();
 }
 function fireEvent(el, event) {
 	const e = event || new Event("click", {bubbles: true});
@@ -95,7 +92,6 @@ function jumpToPosting(postingId) {
 	document.getElementById("postings-container").waitingForReset = true;
 	init();
 }
-
 
 async function drawCategoryChooser(isCategoryFu, addToCategoryFu) {
 	let categories = await StoreDbFrontend.getAllCategories();
@@ -148,8 +144,9 @@ function getArticleId() {
 	return window.location.href.match(/^.+standard\..+\/story\/(\d+)\//)[1];
 }
 function getPostingCount() {
-	return parseInt(document.getElementById("forum-tb-filter-button").innerText.match(/\((\d+)\)/)[1]);
+	return parseInt(document.getElementById("forum-tb-filter-button").firstElementChild.innerText.match(/\((\d+)\)/)[1]);
 }
+
 async function analyzeArticle() {
 	const articleId = getArticleId()
 	let articleDate;
@@ -163,7 +160,6 @@ async function analyzeArticle() {
 	return StoreDbFrontend.saveArticle(articleId, articleDate);
 }
 
-
 async function analyzePostingsAndDraw(article) {
 	let divs = listPostingDivs(document);
 
@@ -171,6 +167,8 @@ async function analyzePostingsAndDraw(article) {
 		let state = new UserPostingState(div, article);
 		await state.init();
 	}
+	if(divs.length)
+		LoadPageHelper.continue();
 }
 function listPostingDivs(doc) {
 	return doc.getElementById("postings-container").querySelectorAll("div[data-postingid]");
@@ -250,7 +248,6 @@ async function debugInit() {
 	await init();
 }
 async function init () {
-	console.log("init");
 	if(document.getElementById("postings-container") === null || document.getElementById("postings-container").waitingForReset) {
 		setTimeout(init, 1000)
 	}

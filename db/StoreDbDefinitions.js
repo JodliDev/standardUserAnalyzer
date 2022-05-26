@@ -9,8 +9,8 @@ const MAIN_CATEGORY_NAME = "Alle",
 	TABLE_CATEGORIES = "categories",
 	TABLE_CATEGORY_COUNTER = "categoryCounter",
 	
-	INDEX_POSTINGS_BY_ARTICLE = "postingId:articleId",
-	INDEX_POSTINGS_BY_PARENT = "postingId:parentId",
+	INDEX_POSTINGS_BY_ARTICLE = "postings:articleId",
+	INDEX_POSTINGS_BY_PARENT = "postings:parentId",
 	INDEX_POSITIVE_RATINGS_BY_POSTING = "positiveRatings:postingId",
 	INDEX_NEGATIVE_RATINGS_BY_POSTING = "negativeRatings:postingId",
 	INDEX_CATEGORY_COUNTER_BY_CATEGORY_AND_USER = "categoryCounter:categoryId,userId";

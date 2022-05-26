@@ -10,7 +10,7 @@ function ArticleInfoBox(article) {
 	}
 	
 	const timeline = new Timeline(article, contentEl, navigationBar);
-	const articleCategory = new ArticleCategory(article, contentEl, navigationBar);
+	const articleCategory = new FrequencyChart(article, contentEl, navigationBar);
 	const automateBtn = new AutomateBtn(article, contentEl, navigationBar);
 	
 	

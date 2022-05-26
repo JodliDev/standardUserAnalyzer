@@ -2,14 +2,15 @@ class Timeline extends BaseNavigationElement {
 	LINE_HEIGHT = 20;
 	currentClusterSize = 30;
 	currentTimeline;
+	currentCategory;
 	
 	constructor(article, contentEl, navigationBar) {
 		super(article, contentEl, navigationBar, Lang.get("timeline_btn"));
 	}
 	
 	async createTimeline(category) {
-		const self = this;
 		let clusterSizeMs = this.currentClusterSize * 60 * 1000;
+		this.currentCategory = category;
 		
 		const postings = await StoreDbFrontend.getPostingsForArticle(this.article.articleId);
 		const begin = postings.length ? postings[0].timestamp : this.article.timestamp;
@@ -146,14 +147,13 @@ class Timeline extends BaseNavigationElement {
 		const userEl = createElement("div", postingContentEl, "upost-head");
 		
 		const userContainerUserNameEl = createElement("div", userEl, "upost-usercontainer");
-		createElement("strong", userContainerUserNameEl)
+		createElement("strong", userContainerUserNameEl, "upost-communityname")
 			.innerText = extendedPosting.user.name;
 		
-		const userContainerDateEl = createElement("div", userEl, "upost-usercontainer");
-		const userDateEl = createElement("span", userContainerDateEl);
+		const userContainerDateEl = createElement("div", userEl, "upost-postingcontainer");
+		const userDateEl = createElement("span", userContainerDateEl, "upost-date");
 		const date = new Date(extendedPosting.posting.timestamp);
 		userDateEl.innerText = date.toLocaleDateString() + ", " + date.toLocaleTimeString();
-		userDateEl.style.marginLeft = "10px";
 		
 		
 		const postingBodyEl = createElement("div", postingContentEl, "upost-body");
@@ -182,7 +182,8 @@ class Timeline extends BaseNavigationElement {
 	}
 	
 	async updateTimeLine(category) {
-		this.currentTimeline.parentNode.removeChild(this.currentTimeline);
+		if(this.currentTimeline && this.currentTimeline.parentNode)
+			this.currentTimeline.parentNode.removeChild(this.currentTimeline);
 		this.currentTimeline = await this.createTimeline(category);
 		this.root.appendChild(this.currentTimeline);
 	}
@@ -191,21 +192,13 @@ class Timeline extends BaseNavigationElement {
 		const self = this;
 		
 		//create navi:
+		const navi = await this.fillCategoryNavi(this.updateTimeLine);
 		
-		const navi = createElement("div", this.root, "addon-timelineNavi");
-		
-		const categories = await StoreDbFrontend.getAllCategories();
-		for(const category of categories) {
-			const btn = createElement("div", navi, "addon-categoryBtn");
-			btn.innerText = category.name;
-			btn.style.cssText = "background-color: "+category.color;
-			btn.onclick = this.updateTimeLine.bind(this, category);
-		}
-		
+		const navi2 = createElement("div", this.root, "addon-timelineNavi");
 		
 		//create user filter
 		
-		const filter = createElement("div", navi, "addon-filterBox");
+		const filter = createElement("div", navi2, "addon-filterBox");
 		
 		const filterLabel = createElement("span", filter, "label");
 		filterLabel.innerText = Lang.get("colon_filter_user");
@@ -223,7 +216,7 @@ class Timeline extends BaseNavigationElement {
 		
 		//create cluster size:
 		
-		const clusterSizeBox = createElement("div", navi, "addon-clusterSizeBox");
+		const clusterSizeBox = createElement("div", navi2, "addon-clusterSizeBox");
 		
 		const clusterSizeLabel = createElement("span", clusterSizeBox, "label");
 		clusterSizeLabel.innerText = Lang.get("colon_cluster_size");
@@ -233,17 +226,10 @@ class Timeline extends BaseNavigationElement {
 		clusterSizeInput.value = this.currentClusterSize;
 		clusterSizeInput.onchange = async function() {
 			self.currentClusterSize = parseInt(clusterSizeInput.value);
-			await self.updateTimeLine(mainCategory);
+			await self.updateTimeLine(self.currentCategory);
 		}
 		
 		const clusterSizeDesc = createElement("span", clusterSizeBox);
 		clusterSizeDesc.innerText = Lang.get("minutes_abr");
-		
-		
-		//create timeline:
-		
-		const mainCategory = await StoreDbFrontend.getMainCategory();
-		this.currentTimeline = await this.createTimeline(mainCategory);
-		this.root.appendChild(this.currentTimeline);
 	}
 }
