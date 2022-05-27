@@ -4,6 +4,7 @@ const Lang = new function() {
 	let store = {
 		article_category: "Artikel Kategorie",
 		automate_description: "Besucht automatisch sämtliche Seiten dieses Artikels und scannt sämtliche Postings sowie Ratings. Achtung: Abhängig von der Anzahl der Postings, dauert das eine Weile.",
+		deleted_profile: "Gelöschtes Profil",
 		frequencies: "Häufigkeiten",
 		posting_scanned_state: "Gescannte Postings: %d / %d",
 		posting_categories: "Posting Kategorien",

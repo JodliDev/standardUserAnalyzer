@@ -1,7 +1,7 @@
 'use strict';
 function User(userId, name) {
 	this.userId = userId ? parseInt(userId) : 0;
-	this.name = name;
+	this.name = userId ? name : Lang.get("deleted_profile");
 }
 function Article(articleId, timestamp, categoryId) {
 	this.articleId = parseInt(articleId);
