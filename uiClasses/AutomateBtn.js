@@ -2,7 +2,7 @@ class AutomateBtn extends BaseNavigationElement {
 	startAutomationBtn;
 	stateEl;
 	isRunning;
-	skipRatings;
+	skipRatings = true;
 	
 	constructor(article, contentEl, navigationBar) {
 		super(article, contentEl, navigationBar, Lang.get("scan_article"));

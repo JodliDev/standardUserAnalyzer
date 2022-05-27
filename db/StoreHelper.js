@@ -117,32 +117,6 @@ const StoreHelper = {
 		return posting.categories;
 	},
 	
-	addArticleToCategory: async function(article, categoryId) {
-		if(article.categories.includes(categoryId))
-			return;
-		article.categories.push(categoryId);
-		await StoreDbFrontend.updateArticle(article);
-		
-		const postings = await StoreDbFrontend.getPostingsForArticle(article.articleId);
-		for(const posting of postings) {
-			await this.addPostingToCategory(posting, categoryId);
-		}
-	},
-	removeArticleFromCategory: async function(article, categoryId) {
-		const index = article.categories.indexOf(categoryId);
-		if(index !== -1) {
-			article.categories.splice(index, 1);
-		}
-		else
-			return;
-		await StoreDbFrontend.updateArticle(article);
-		
-		const postings = await StoreDbFrontend.getPostingsForArticle(article.articleId);
-		for(const posting of postings) {
-			await this.removePostingFromCategory(posting, categoryId);
-		}
-	},
-	
 	addPostingToCategory: async function(posting, categoryId) {
 		if(posting.categories.includes(categoryId))
 			return;
@@ -178,7 +152,6 @@ const StoreHelper = {
 		const positiveRatings = await StoreDbFrontend.getPositiveRatingsForPosting(posting.postingId);
 		const negativeRatings = await StoreDbFrontend.getNegativeRatingsForPosting(posting.postingId);
 		const categoryId = categoryCounter.categoryId;
-		
 		for(const rating of positiveRatings) {
 			categoryCounter.receivedPositiveRatingCount += value;
 			

@@ -77,7 +77,6 @@ const StoreDbBackend = new function() {
 				reject();
 			};
 			request.onsuccess = function() {
-				console.log(indexName, indexValue, request.result)
 				resolve(request.result);
 			};
 			
