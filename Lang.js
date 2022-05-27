@@ -24,7 +24,6 @@ const Lang = new function() {
 		posting_does_not_exist: "Posting existiert nicht.",
 		prompt_choose_name_for_category: "Wähle einen Namen für die Kategorie.",
 		prompt_choose_color_for_category: "Wähle einen css Farbcode (Hexadecimal ist möglich).",
-		prompt_import_data: "Dadurch werden alle bisherigen Daten überschrieben / gelöscht. \nFortfahren?",
 		responses: "Antworten",
 		scan_article: "Scanne Artikel",
 		skip_ratings: "Überspringe Ratings",
