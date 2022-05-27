@@ -138,7 +138,7 @@ const StoreDbFrontend = new function() {
 	};
 	
 	this.savePositiveRating = function(posting, givenUserId, receivedUserId) {
-		return saveObj(TABLE_POSITIVE_RATINGS, new Rating(posting.articleId, posting.postingId, givenUserId, receivedUserId));
+		return saveObj(TABLE_POSITIVE_RATINGS, new Rating(posting, givenUserId, receivedUserId));
 	};
 	this.saveNegativeRating = function(posting, givenUserId, receivedUserId) {
 		return saveObj(TABLE_NEGATIVE_RATINGS, new Rating(posting, givenUserId, receivedUserId));
