@@ -42,8 +42,13 @@ class BaseNavigationElement {
 		let currentCategoryBtn = null;
 		for(const category of categories) {
 			const btn = createElement("div", navi, "addon-categoryBtn");
-			btn.innerText = category.name;
-			btn.style.cssText = "background-color: "+category.color;
+			createElement("span", btn, "addon-colorPreview")
+				.style.backgroundColor = category.color;
+			createElement("span", btn)
+				.innerText = category.name;
+			
+			// btn.innerText = category.name;
+			btn.style.borderColor = category.color;
 			btn.onclick = function() {
 				if(currentCategoryBtn)
 					currentCategoryBtn.classList.remove("selected");
