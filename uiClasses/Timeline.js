@@ -152,8 +152,10 @@ class Timeline extends BaseNavigationElement {
 		
 		const userContainerDateEl = createElement("div", userEl, "upost-postingcontainer");
 		const userDateEl = createElement("span", userContainerDateEl, "upost-date");
-		const date = new Date(extendedPosting.posting.timestamp);
-		userDateEl.innerText = date.toLocaleDateString() + ", " + date.toLocaleTimeString();
+		const userDateContentEl = createElement("span", userDateEl, "js-timestamp");
+		const dateString = Formatter.timeStampToLocaleDateString(extendedPosting.posting.timestamp);
+		userDateContentEl.innerText = dateString;
+		userDateContentEl.setAttribute("data-date", dateString);
 		
 		
 		const postingBodyEl = createElement("div", postingContentEl, "upost-body");
@@ -163,11 +165,15 @@ class Timeline extends BaseNavigationElement {
 			createElement("h4", postingBodyEl, "upost-title")
 				.innerText = extendedPosting.title;
 		}
+		else
+			createElement("h4", postingBodyEl, "upost-title")
 		
 		if(extendedPosting.msg) {
 			createElement("div", postingBodyEl, "upost-text")
 				.innerText = extendedPosting.msg;
 		}
+		else
+			createElement("h4", postingBodyEl, "upost-text")
 		
 		createElement("div", postingBodyEl, "addon-gotoBtn")
 			.onclick = function() {

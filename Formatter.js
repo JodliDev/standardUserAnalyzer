@@ -11,7 +11,7 @@ const Formatter = new function() {
 		monthsMap[tempDate.toLocaleString("default", { month: "long" })] = i;
 	}
 	
-	//create a map for the locale format (that is used at standard):
+	//create a map for the locale format (that is used at standard.at):
 	//Thanks to: https://stackoverflow.com/questions/43368659/how-to-determine-users-locale-date-format-using-javascript-format-is-dd-mm-or-m
 	const formatArray = new Intl.DateTimeFormat("default",  {month:"long", day:"numeric", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit"}).formatToParts(tempDate);
 	
@@ -50,4 +50,23 @@ const Formatter = new function() {
 		
 		return date.getTime();
 	};
+	
+	this.timeStampToLocaleDateString = function(timeStamp) {
+		const date = new Date(timeStamp);
+		const list = [];
+		list[formatMap.second] = {search: "(\\d+)", replace: String(date.getSeconds()).padStart(2, '0')};
+		list[formatMap.minute] = {search: "(\\d+)", replace: String(date.getMinutes()).padStart(2, '0')};
+		list[formatMap.hour] = {search: "(\\d+)", replace: String(date.getHours()).padStart(2, '0')};
+		list[formatMap.day] = {search: "(\\d+)", replace: date.getDate()};
+		list[formatMap.month] = {search: "(.+)", replace: date.toLocaleString("default", { month: "long" })};
+		list[formatMap.year] = {search: "(\\d+)", replace: date.getFullYear()};
+		
+		let r = formatString
+		for(const line of list) {
+			if(!line)
+				continue;
+			r = r.replace(line.search, line.replace);
+		}
+		return r;
+	}
 };

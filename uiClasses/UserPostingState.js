@@ -105,10 +105,9 @@ class UserPostingState {
 		const dropdown = createFloatingDropdown(this.btnBox);
 		
 		let saveAndReload = async function() {
-			await self.init();
+			await self.init(self.extendedPostingData);
 			dropdown.close();
 			await self.openPostingCategoryMenu();
-			closeArticleInfo();
 		}
 		
 		//
