@@ -12,16 +12,13 @@ function close_on_clickOutside(el, additionalCloseFu) {
 	if(el.hasOwnProperty("close-outside"))
 		return
 	el["close-outside"] = true;
-	let closeFu = function() {
-		if(!el)
+	let closeFu = function(target) {
+		if(!el || (additionalCloseFu && additionalCloseFu(target)))
 			return false;
 		delete el["close-outside"];
 		document.removeEventListener("click", click_outside);
 
 		el.parentElement.removeChild(el);
-		
-		if(additionalCloseFu)
-			additionalCloseFu();
 		el = null;
 		return true;
 	};
@@ -32,7 +29,7 @@ function close_on_clickOutside(el, additionalCloseFu) {
 			if(el.contains(target))
 				return;
 
-			closeFu();
+			closeFu(target);
 		}
 		else
 			document.removeEventListener("click", click_outside);
@@ -46,22 +43,44 @@ function close_on_clickOutside(el, additionalCloseFu) {
 }
 function createFloatingDropdown(referenceEl) {
 	const visibleSpace = 5;
-	let parent = document.getElementById("story-community");
-	let dropdownWidth = parent.offsetWidth/1.5;
-	let rectParent = parent.getBoundingClientRect();
-	let rectReference = referenceEl.getBoundingClientRect();
+	const parent = document.getElementById("story-community");
+	const dropdownWidth = parent.offsetWidth/1.5;
+	const rectParent = parent.getBoundingClientRect();
+	const rectReference = referenceEl.getBoundingClientRect();
 	//20: padding*2
-	let x = Math.min(parent.offsetWidth - dropdownWidth - 20 - visibleSpace, Math.max(5, referenceEl.offsetLeft + referenceEl.offsetWidth/2 - dropdownWidth/2));
-	let y = (rectReference.top - rectParent.top) + referenceEl.offsetHeight;
+	const x = Math.min(parent.offsetWidth - dropdownWidth - 20 - visibleSpace, Math.max(5, referenceEl.offsetLeft + referenceEl.offsetWidth/2 - dropdownWidth/2));
+	const y = (rectReference.top - rectParent.top) + referenceEl.offsetHeight;
 	//6: padding*2
 	const maxHeight = window.innerHeight / 2;
 	
-	let dropdownEl = createElement("div", null, "addon-dropdown");
+	let dropdownCollector = document.getElementById("addon-dropdownCollector");
+	if(!dropdownCollector) {
+		dropdownCollector = createElement("div", parent);
+		dropdownCollector.setAttribute("id", "addon-dropdownCollector");
+	}
+	const dropdownEl = createElement("div", dropdownCollector, "addon-dropdown");
 	dropdownEl.style.cssText = "left:" + x + "px; top:" + y + "px; width: "+dropdownWidth+"px; max-height: "+maxHeight+"px";
 	
-	parent.appendChild(dropdownEl);
 	referenceEl.classList.add("dropdown-opened");
-	dropdownEl.close = close_on_clickOutside(dropdownEl, function() {
+	const currentChildren = dropdownCollector.children;
+	const canCloseChildren = []
+	for(const el of dropdownCollector.children) {
+		canCloseChildren.push(el);
+	}
+	
+	dropdownEl.close = close_on_clickOutside(dropdownEl, function(target) {
+		if(target) {
+			if(dropdownCollector.contains(target)) {
+				let cancelClose = true;
+				for(const el of canCloseChildren) {
+					if(el.contains(target))
+						cancelClose = false;
+				}
+				if(cancelClose)
+					return true;
+			}
+			
+		}
 		referenceEl.classList.remove("dropdown-opened");
 	});
 	return dropdownEl;
@@ -227,15 +246,9 @@ async function getFromPostingCache(article, postingId) {
 }
 
 
-
-let articleInfo;
-function closeArticleInfo() {
-	articleInfo.close();
-}
-
 async function inject () {
 	const article = await analyzeArticle();
-	articleInfo = new ArticleInfoBox(article);
+	new ArticleInfoBox(article);
 	
 	await analyzePostingsAndDraw(article);
 	

@@ -57,6 +57,14 @@
 }
 
 
+.addon-colorPreview {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin: 5px;
+	vertical-align: middle;
+}
+
 
 .addOn-btnBox {
 	display: flex;
@@ -117,6 +125,11 @@
 	position: absolute;
 }
 
+.addon-categoryChooser .addon-line {
+	cursor: pointer;
+}
+
+
 .addon-userStatisticsWindow {
 	width: 100%;
 	overflow-x: auto;
@@ -159,8 +172,18 @@
 	border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 	font-size: 0.8em;
 }
-.addon-timelineNavi .selected {
+.addon-timelineNavi .addon-categoryBtn {
 	font-weight: bold;
+	margin-bottom: 2px;
+}
+
+.addon-timelineNavi .addon-categoryBtn span {
+	vertical-align: middle;
+}
+.addon-timelineNavi .addon-categoryBtn.selected {
+	border-bottom-style: solid;
+	border-bottom-width: 2px;
+	border-color: black;
 }
 
 

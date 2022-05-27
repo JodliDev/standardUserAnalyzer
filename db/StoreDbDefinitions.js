@@ -1,5 +1,5 @@
 const MAIN_CATEGORY_NAME = "Alle",
-	MAIN_CATEGORY_COLOR = "gray",
+	MAIN_CATEGORY_COLOR = "#ec008c",
 	
 	TABLE_USER = "users",
 	TABLE_ARTICLES = "articles",

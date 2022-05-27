@@ -25,12 +25,12 @@ class FrequencyChart extends BaseNavigationElement {
 		const threadDataset = {
 			label: Lang.get("threads"),
 			data: this.threadData,
-			backgroundColor: ["rgba(255, 0, 0, 0.5)"]
+			backgroundColor: ["rgb(0,121,194)"]
 		};
 		const responseDataset = {
 			label: Lang.get("responses"),
 			data: this.responsesData,
-			backgroundColor: ["rgba(255,2550, 0, 0.5)"]
+			backgroundColor: ["rgb(255,219,84)"]
 		};
 		
 		
