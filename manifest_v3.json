@@ -1,14 +1,20 @@
 {
-	"browser_action": {
-		"default_icon": "icon-128.png",
-		"default_title": "derStandard User Analyzer"
+	"manifest_version": 3,
+	"name": "derStandard User Analyzer",
+	"version": "2.0.1",
+	
+	"description": "Protokolliert Postings und Ratings für User im Standard-Forum.",
+	"author": "JodliDev",
+	"homepage_url": "https://github.com/JodliDev/standardUserAnalyzer",
+	"icons": {
+		"128": "icon-128.png",
+		"16": "icon-16.png",
+		"48": "icon-48.png"
 	},
-	"background": {
-		"scripts": [
-			"db/StoreDbDefinitions.js",
-			"db/StoreDbBackend.js",
-			"libs/indexedDbImportExport.js"
-		]
+	
+	"options_ui": {
+		"page": "options/options.html",
+		"browser_style": true
 	},
 	"content_scripts": [ {
 		"js": [
@@ -38,26 +44,20 @@
 		"matches": [ "*://*.derstandard.at/story/*", "*://*.derstandard.de/story/*" ],
 		"run_at": "document_idle"
 	} ],
-	"options_ui": {
-		"page": "options/options.html",
-		"browser_style": true
-	},
 	
-	
-	"description": "Protokolliert Postings und Ratings für User im Standard-Forum.",
-	"author": "JodliDev",
-	"homepage_url": "https://github.com/JodliDev/standardUserAnalyzer",
-	"icons": {
-		"128": "icon-128.png",
-		"16": "icon-16.png",
-		"48": "icon-48.png"
-	},
 	"permissions": [
 		"storage",
-		"webRequest",
+		"webRequest"
+	],
+	"host_permissions": [
 		"https://apps.derstandard.at/"
 	],
-	"manifest_version": 2,
-	"name": "derStandard User Analyzer",
-	"version": "2.0.0"
+	
+	"action": {
+		"default_icon": "icon-128.png",
+		"default_title": "derStandard User Analyzer"
+	},
+	"background": {
+		"service_worker": "service_worker.js"
+	}
 }
