@@ -32,8 +32,13 @@ class AutomateBtn extends BaseNavigationElement {
 		if(!startBtn.disabled) {
 			this.setState(Lang.get("go_to_first_page"));
 			fireEvent(startBtn);
-			// await waitForElementChange(document.getElementById("postings-container"));
-			await LoadPageHelper.wait();
+			try {
+				await LoadPageHelper.wait();
+			}
+			catch(e) {
+				console.error("Waiting for loading page 1 reached a timeout.");
+			}
+			
 			document.getElementById("addon-root").scrollIntoView();
 		}
 		
@@ -47,8 +52,12 @@ class AutomateBtn extends BaseNavigationElement {
 			if(!nextBtn.disabled && this.isRunning) {
 				this.setState(Lang.get("go_to_page_x_of_x", this.getCurrentPage() + 1, this.getMaxPages()));
 				fireEvent(nextBtn);
-				// await waitForElementChange(document.getElementById("postings-container"));
-				await LoadPageHelper.wait();
+				try {
+					await LoadPageHelper.wait();
+				}
+				catch(e) {
+					console.error("Waiting for loading page "+(this.getCurrentPage() + 1)+" reached a timeout.");
+				}
 				document.getElementById("addon-root").scrollIntoView();
 				nextBtn = document.getElementsByClassName("forum-tb-btnnext")[0];
 			}
@@ -76,7 +85,6 @@ class AutomateBtn extends BaseNavigationElement {
 			
 			if(dbRatings.positive !== positiveRating || dbRatings.negative !== negativeRating) {
 				fireEvent(el);
-				console.log("await", postingId, el);
 				try {
 					await LoadRatingsHelper.wait(postingId);
 				}

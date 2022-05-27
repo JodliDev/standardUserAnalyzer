@@ -80,7 +80,8 @@ class UserPostingState {
 		const negativeIndex = {};
 		for(let i=children.length-1; i>=0; --i) {
 			const line = children[i];
-			const userId = line.getElementsByTagName("button")[0].getAttribute("data-communityidentityid");
+			const button = line.getElementsByTagName("button"); //can be 0 on deleted profile
+			const userId = button.length ? button[0].getAttribute("data-communityidentityid") : 0;
 			const rating = line.getAttribute("data-rate");
 			
 			if(rating === "positive") {

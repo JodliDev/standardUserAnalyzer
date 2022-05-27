@@ -1,6 +1,6 @@
 'use strict';
 function User(userId, name) {
-	this.userId = parseInt(userId);
+	this.userId = userId ? parseInt(userId) : 0;
 	this.name = name;
 }
 function Article(articleId, timestamp, categoryId) {
@@ -13,7 +13,7 @@ function Posting(articleId, parentId, responseLevel, postingId, userId, timeStri
 	this.parentId = parentId ? parseInt(parentId) : "";
 	this.responseLevel = parseInt(responseLevel);
 	this.postingId = parseInt(postingId);
-	this.userId = parseInt(userId);
+	this.userId = userId ? parseInt(userId) : 0;
 	this.timestamp = Formatter.localeDateStringToTimeStamp(timeString);
 	this.isThread = parentId === "";
 	this.categories = [];
@@ -33,7 +33,7 @@ function Category(name, color) {
 function CategoryCounter(categoryId, userId) {
 	//id
 	this.categoryId = parseInt(categoryId);
-	this.userId = parseInt(userId);
+	this.userId = userId ? parseInt(userId) : 0;
 	this.threadCount = 0;
 	this.responseCount = 0;
 	this.givenPositiveRatingCount = 0;

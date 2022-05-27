@@ -62,7 +62,7 @@ const StoreDbFrontend = new function() {
 	}
 	
 	this.getUser = function(userId) {
-		return getObjByKey(TABLE_USER, false, parseInt(userId));
+		return getObjByKey(TABLE_USER, false, userId ? parseInt(userId) : 0);
 	};
 	this.saveUser = async function(userId, name) {
 		const user = await this.getUser(userId);
@@ -136,12 +136,6 @@ const StoreDbFrontend = new function() {
 	this.countRatingsForPosting = function(postingId) {
 		return this.countRatings(INDEX_POSITIVE_RATINGS_BY_POSTING, parseInt(postingId));
 	};
-	this.countGivenRatings = function(categoryId, givenUserId) {
-		return this.countRatings(INDEX_POSITIVE_RATINGS_BY_CATEGORY_AND_GIVENUSER, [parseInt(categoryId), parseInt(givenUserId)]);
-	};
-	this.countReceivedRatings = function(categoryId, receivedUserId) {
-		return this.countRatings(INDEX_POSITIVE_RATINGS_BY_CATEGORY_AND_RECEIVEDUSER, [parseInt(categoryId), parseInt(receivedUserId)]);
-	};
 	
 	this.savePositiveRating = function(posting, givenUserId, receivedUserId) {
 		return saveObj(TABLE_POSITIVE_RATINGS, new Rating(posting.articleId, posting.postingId, givenUserId, receivedUserId));
@@ -179,7 +173,7 @@ const StoreDbFrontend = new function() {
 	};
 	
 	this.getCategoryCounter = function(categoryId, userId) {
-		return getObjByKey(TABLE_CATEGORY_COUNTER, INDEX_CATEGORY_COUNTER_BY_CATEGORY_AND_USER, [parseInt(categoryId), parseInt(userId)]);
+		return getObjByKey(TABLE_CATEGORY_COUNTER, INDEX_CATEGORY_COUNTER_BY_CATEGORY_AND_USER, [parseInt(categoryId), userId ? parseInt(userId) : 0]);
 	};
 	this.saveCategoryCounter = async function(categoryId, userId) {
 		const categoryCounter = await this.getCategoryCounter(categoryId, userId);
