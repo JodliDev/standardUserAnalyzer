@@ -187,25 +187,25 @@ class UserPostingState {
 			
 			td = createElement("td", didRatingsTr);
 			
-			span = createElement("span", td, "ratingNegative");
+			span = createElement("span", td, "addon-ratingNegative");
 			span.innerText = await StoreHelper.getGivenNegativeRatingsCount(user.userId, category.id);
 			
 			span = createElement("span", td);
 			span.innerText = "/";
 			
-			span = createElement("span", td, "ratingPositive");
+			span = createElement("span", td, "addon-ratingPositive");
 			span.innerText = await StoreHelper.getGivenPositiveRatingCount(user.userId, category.id);
 			
 			
 			td = createElement("td", gotRatingsTr);
 			
-			span = createElement("span", td, "ratingNegative");
+			span = createElement("span", td, "addon-ratingNegative");
 			span.innerText = await StoreHelper.getReceivedNegativeRatingsCount(user.userId, category.id);
 			
 			span = createElement("span", td);
 			span.innerText = "/";
 			
-			span = createElement("span", td, "ratingPositive");
+			span = createElement("span", td, "addon-ratingPositive");
 			span.innerText = await StoreHelper.getReceivedPositiveRatingCount(user.userId, category.id);
 		}
 		

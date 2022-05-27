@@ -132,10 +132,11 @@ class Timeline extends BaseNavigationElement {
 	
 	
 	async createPostingEl(extendedPosting, dropdownEl, isHighlighted) {
+		const posting = extendedPosting.posting;
 		const postingDiv = document.createElement("div");
 		postingDiv.classList.add("upost", "upost-is-expanded");
-		postingDiv.setAttribute("data-level", extendedPosting.posting.responseLevel);
-		if(!extendedPosting.posting.isThread) {
+		postingDiv.setAttribute("data-level", posting.responseLevel);
+		if(!posting.isThread) {
 			postingDiv.classList.add("upost-is-reply");
 		}
 		if(isHighlighted)
@@ -153,10 +154,22 @@ class Timeline extends BaseNavigationElement {
 		const userContainerDateEl = createElement("div", userEl, "upost-postingcontainer");
 		const userDateEl = createElement("span", userContainerDateEl, "upost-date");
 		const userDateContentEl = createElement("span", userDateEl, "js-timestamp");
-		const dateString = Formatter.timeStampToLocaleDateString(extendedPosting.posting.timestamp);
+		const dateString = Formatter.timeStampToLocaleDateString(posting.timestamp);
 		userDateContentEl.innerText = dateString;
 		userDateContentEl.setAttribute("data-date", dateString);
 		
+		const rating = await StoreDbFrontend.countRatingsForPosting(posting.postingId);
+		const ratingsEl = createElement("div", userContainerDateEl, "ratings");
+		const ratingsContent = createElement("div", ratingsEl, "ratings-counts");
+		
+		if(rating.negative) {
+			createElement("span", ratingsContent, "addon-ratingNegative")
+				.innerText = rating.negative;
+		}
+		if(rating.positive) {
+			createElement("span", ratingsContent, "addon-ratingPositive")
+				.innerText = rating.positive;
+		}
 		
 		const postingBodyEl = createElement("div", postingContentEl, "upost-body");
 		
@@ -175,11 +188,13 @@ class Timeline extends BaseNavigationElement {
 		else
 			createElement("h4", postingBodyEl, "upost-text")
 		
-		createElement("div", postingBodyEl, "addon-gotoBtn")
-			.onclick = function() {
-				jumpToPosting(extendedPosting.posting.postingId);
-				dropdownEl.close();
-			};
+		const a = createElement("a", postingBodyEl, "addon-gotoBtn");
+		a.href = "https://derstandard.at/permalink/p/" + posting.postingId;
+		a.onclick = function(e) {
+			e.preventDefault();
+			jumpToPosting(posting.postingId);
+			dropdownEl.close();
+		};
 		
 		const userState = new UserPostingState(postingDiv, this.article);
 		await userState.init(extendedPosting);

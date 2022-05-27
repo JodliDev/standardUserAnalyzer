@@ -101,6 +101,7 @@
 }
 .addon-center .addon-centerContent {
 	display: inline-block;
+	text-align: left;
 }
 
 .addon-expandable {
@@ -128,6 +129,9 @@
 .addon-categoryChooser .addon-line {
 	cursor: pointer;
 }
+.addon-categoryChooser .addon-colorPreview {
+	text-align: center;
+}
 
 
 .addon-userStatisticsWindow {
@@ -148,18 +152,22 @@
 .addon-userStatistics td {
 	text-align: center;
 }
-
-.addon-userStatistics .ratingNegative {
-	color: red;
+.addon-dropdown .ratings-counts {
+	cursor: unset !important;
 }
-.addon-userStatistics .ratingNegative::before {
+.addon-ratingNegative {
+	color: #900;
+	margin: 0 5px;
+}
+.addon-ratingNegative::before {
 	content: "-";
 }
 
-.addon-userStatistics .ratingPositive {
-	color: green;
+.addon-ratingPositive {
+	color: #060;
+	margin: 0 5px;
 }
-.addon-userStatistics .ratingPositive::before {
+.addon-ratingPositive::before {
 	content: "+";
 }
 
@@ -268,7 +276,7 @@
 }
 .addon-gotoBtn:hover {
 	background-color: var(--theme-primarydeco);
-	color: white;
+	color: white !important;
 }
 
 
