@@ -134,7 +134,7 @@ const StoreDbFrontend = new function() {
 	};
 	
 	this.countRatingsForPosting = function(postingId) {
-		return this.countRatings(INDEX_POSITIVE_RATINGS_BY_POSTING, parseInt(postingId));
+		return this.countRatings(INDEX_POSITIVE_RATINGS_BY_POSTING, parseInt(postingId), INDEX_NEGATIVE_RATINGS_BY_POSTING, parseInt(postingId));
 	};
 	
 	this.savePositiveRating = function(posting, givenUserId, receivedUserId) {
