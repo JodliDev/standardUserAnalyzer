@@ -165,7 +165,7 @@ const StoreDbBackend = new function() {
 }
 
 
-getRuntime().onMessage.addListener(function({type, tableName, indexName, key, value, overwrite}, sender, sendResponse ) {
+chrome.runtime.onMessage.addListener(function({type, tableName, indexName, key, value, overwrite}, sender, sendResponse ) {
 	let promise;
 	switch(type) {
 		case "getCount":

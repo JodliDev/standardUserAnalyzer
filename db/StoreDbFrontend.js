@@ -1,7 +1,14 @@
 'use strict';
 
+function sendMessage(data) {
+	return new Promise(function(resolve, reject) {
+		chrome.runtime.sendMessage(data, function(response) {
+			resolve(response);
+		});
+	})
+}
+
 const StoreDbFrontend = new function() {
-	
 	const getCount = function(tableName, indexName, indexValue) {
 			return sendMessage({
 				type: "getCount",

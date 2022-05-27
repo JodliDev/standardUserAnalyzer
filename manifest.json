@@ -5,8 +5,6 @@
 	},
 	"background": {
 		"scripts": [
-			"polyfill.js",
-			"Lang.js",
 			"db/StoreDbDefinitions.js",
 			"db/StoreDbBackend.js",
 			"libs/indexedDbImportExport.js"
@@ -14,7 +12,6 @@
 	},
 	"content_scripts": [ {
 		"js": [
-			"polyfill.js",
 			"Lang.js",
 			"dataClasses.js",
 			"PostingCache.js",
