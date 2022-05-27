@@ -2,5 +2,5 @@
 *.zip
 *.iml
 manifest.json
-/screenshots/
+/screenshots/*.xcf
 /zipped/
