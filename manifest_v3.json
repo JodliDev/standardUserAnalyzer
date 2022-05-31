@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "derStandard User Analyzer",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	
 	"description": "Protokolliert Postings und Ratings für User im Standard-Forum.",
 	"author": "JodliDev",
@@ -45,10 +45,6 @@
 		"run_at": "document_idle"
 	} ],
 	
-	"permissions": [
-		"storage",
-		"webRequest"
-	],
 	"host_permissions": [
 		"https://apps.derstandard.at/"
 	],
